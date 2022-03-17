@@ -17,7 +17,9 @@ const photoController = require("./controllers/photoController");
 const pageController = require("./controllers/pageController");
 
 const app = express();
-mongoose.connect("mongodb://localhost/pcat-db");
+mongoose.connect(
+  "mongodb+srv://emyran:6kx7SXOweWChBVZm@cluster0.xhjax.mongodb.net/pcat-db?retryWrites=true&w=majority"
+);
 
 //TEMPLATE ENGINE
 app.set("view engine", "ejs");
@@ -39,7 +41,7 @@ app.get("/about", pageController.getAboutPage);
 app.get("/add", pageController.getAddPage);
 app.get("/photos/edit/:id", pageController.getEditPage);
 
-const port = 3000;
+const port = process.env.port || 5000;
 
 app.listen(port, () => {
   console.log(`Sunucu ${port}'da baslatildi.`);
