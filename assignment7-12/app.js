@@ -2,30 +2,43 @@ const express = require("express");
 
 const ejs = require("ejs");
 
+const mongoose = require("mongoose");
+
+const Post = require("./models/Post");
+
 const app = express();
+mongoose.connect(
+  "mongodb+srv://cleanblog:bbuk8ihBNyhwkrta@cluster0.hgclw.mongodb.net/cleanblog-db?retryWrites=true&w=majority"
+);
 
 //TODO: TEMPLATE ENGINE
 app.set("view engine", "ejs");
 
 //TODO:  MIDDLEWARES
 app.use(express.static("public"));
+app.use(express.urlencoded({ extended: true })); // fix for req body undefined.
 
 //TODO: SCHEMA
 
 //TODO: MVC REFACTOR
 
 //ROUTES
-app.get("/", (res, req) => {
-  const blog = { id: 1, title: "Blog Title", description: "Blog Description" };
-  req.render("index", blog);
+app.get("/", async (req, res) => {
+  const blog = await Post.find().sort("-dateCreated");
+  res.render("index", { blog });
 });
 
-app.get("/about", (res, req) => {
-  req.render("about");
+app.post("/", async (req, res) => {
+  await Post.create(req.body);
+  res.redirect("/");
 });
 
-app.get("/add_post", (res, req) => {
-  req.render("add_post");
+app.get("/about", (req, res) => {
+  res.render("about");
+});
+
+app.get("/add_post", (req, res) => {
+  res.render("add_post");
 });
 
 const port = 3000;
