@@ -1,21 +1,24 @@
 const express = require("express");
-const ejs = require("ejs");
-
+const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
+const pageRoute = require("./routes/pageRoute");
+const courseRoute = require("./routes/courseRoute");
 const app = express();
+
+mongoose.connect("mongodb://localhost/smartedu-db").then(() => {
+  console.log("database connected.");
+});
 
 const port = 3000;
 
 app.set("view engine", "ejs");
 
 app.use(express.static("public"));
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing
 
-app.get("/", (req, res) => {
-  res.status(200).render("index", { page_name: "index" });
-});
-
-app.get("/about", (req, res) => {
-  res.status(200).render("about", { page_name: "about" });
-});
+app.use("/", pageRoute);
+app.use("/courses", courseRoute);
 
 app.listen(port, () => {
   console.log(`App started on port ${port}`);
