@@ -68,7 +68,15 @@
         </div>
         <div class="widget-categories">
           <h3 class="widget-title">Categories</h3>
-          <ul></ul>
+          <ul>
+            <% for (let i = 0; i < categories.length; i++) { %>
+            <li>
+              <a href="/courses?categories=<%= categories[i].slug %>"
+                ><%= categories[i].name.toUpperCase() %></a
+              >
+            </li>
+            <% } %>
+          </ul>
         </div>
       </div>
     </div>
