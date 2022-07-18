@@ -1,5 +1,6 @@
 const Course = require("../models/Course");
 const Category = require("../models/Category");
+const roleMiddleware = require("../middlewares/roleMiddleware");
 
 exports.createCourse = async (req, res) => {
   try {
