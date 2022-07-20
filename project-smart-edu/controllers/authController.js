@@ -64,3 +64,18 @@ exports.getDashboardPage = async (req, res) => {
     users,
   });
 };
+
+exports.deleteUser = async (req, res) => {
+  try {
+    await User.findByIdAndRemove(req.params.id);
+    await Course.deleteMany({ user: req.params.id });
+    req.flash("success", `User Deleted.`);
+    res.status(200).redirect("/users/dashboard");
+  } catch (error) {
+    const errors = validationResult(req);
+    for (let i = 0; i < errors.array().length; i++) {
+      req.flash("error", `${errors.array()[i].msg}`);
+    }
+    res.status(400).redirect("/users/dashboard");
+  }
+};
